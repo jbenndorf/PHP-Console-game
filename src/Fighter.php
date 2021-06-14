@@ -1,34 +1,34 @@
 <?php
 
-require_once 'Traits/RockPapersScissors.php';
 require_once 'Player.php';
-require_once 'Person.php';
+require_once 'RockPapersScissors.php';
 
-class Fighter extends Person implements Player
+class Fighter extends Player
 {
-    use RockPapersScissors;
-
     public function __construct(string $name, string $language)
     {
-        $this->name = $name;
-        $this->language = $language;
+        parent::__construct($name, $language);
+
+        //Output a terminal message to greet the player
+        $greeting = $this->greet($name, $language);
+        $this->displayMessage($greeting, 1);
+
+        //Play Rock, Paper, Scissors a given number of rounds
+        $rounds = $this->getUserInput('How many rounds of Rock, Paper, Scissors would you like to play?');
+        $this->challengeOpponent($rounds);
+
+
     }
 
-    public function greetOpponent()
+    public function challengeOpponent($rounds)
     {
-        $language = $this->getLanguage();
-        $name = $this->getName();
-        $greeting = $this->translateHello($language);
-
-        echo sprintf("%s, I am %s! I can't wait to beat you at a game.\n", $greeting, $name);
+        $game = new RockPapersScissors();
+        $game->playRockPaperScissors($rounds);
     }
 
-    /*
-     * A fighter challenges their opponent with a game of Rock, Paper, Scissors.
-     */
-    public function challengeOpponent()
+    public function greet($name, $language): string
     {
-        $this->playRockPapersScissors();
+        $international_hello = $this->translateHello($language);
+        return sprintf("%s, %s! It is nice meeting you.", $international_hello, $name);
     }
-
 }

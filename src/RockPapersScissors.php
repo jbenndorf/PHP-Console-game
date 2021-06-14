@@ -27,11 +27,11 @@ class RockPapersScissors
             $result = $this->getResult($player, $opponent);
 
             if ($result == 'Win') {
-                echo sprintf("You won! %s beats %s.\n", $player_constant, $opponent_constant);
+                Player::displayMessage(sprintf("You won! %s beats %s.", $player_constant, $opponent_constant),0);
             } elseif ($result == 'Draw') {
-                echo sprintf("There is a draw between %s and %s.\n", $player_constant, $opponent_constant);
+                Player::displayMessage(sprintf("There is a draw between %s and %s.", $player_constant, $opponent_constant),0);
             } else {
-                echo sprintf("You have lost. %s does not beat %s.\n", $player_constant, $opponent_constant);
+                Player::displayMessage(sprintf("You have lost. %s does not beat %s.", $player_constant, $opponent_constant),0);
             }
         }
     }
@@ -56,7 +56,7 @@ class RockPapersScissors
     public function getPlayerChoice(): int
     {
         while (true) {
-            $choice = readline("Please choose between 1)Rock, 2)Paper and 3)Scissors: ");
+            $choice = readline("Please choose between a NUMBER for (1)Rock, (2)Paper and (3)Scissors: ");
             if (array_key_exists($choice, self::MATCHES)) {
                 return $choice;
             }

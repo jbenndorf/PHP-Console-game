@@ -5,47 +5,78 @@ require_once 'src/Civilian.php';
 
 class Game
 {
-    private \Player $player;
+    private string $name;
+    private string $language;
+    private Player $player;
+
+    public function __construct(){
+        Player::displayMessage('Welcome!', 1);
+    }
+
+    public function saveDetails() : void
+    {
+        $this->name = Player::getUserInput("Please enter your name: ");
+        $this->language = Player::getUserInput(
+            "Please specify your language by entering a language"
+            ."code (e.g. fr, en, es, de...): ");
+    }
+
+    public function startGame() : void
+    {
+        $name = $this->getName();
+        $language = $this->getLanguage();
+
+        $explanation = "Would you like to play as a (1) fighter or (2) civilian?\n"
+             ."Fighters can challenge their opponents to a game "
+             ."of Rock, Paper, Scissors. Civilians can play hangman.";
+        Player::displayMessage($explanation, 1);
+
+        //Allows user to choose the type of player
+        while (true){
+            $player = Player::getUserInput("Please select a number: ");
+            if($player == 1 || $player == 2){
+                break;
+            }
+        }
+        //Instantiates a Fighter or Civilian object
+        if ($player == 1) {
+            $this->setPlayer(new Fighter($name, $language));
+        } else {
+            $this->setPlayer(new Civilian($name, $language));
+        }
+    }
+
+    public function exit() : void
+    {
+        $name = $this->getName();
+        Player::displayMessage(sprintf("See you soon, %s", $name), 0);
+    }
 
     public function getPlayer(): Player
     {
         return $this->player;
     }
 
-    public function addPlayer(\Player $player) : Game
+    public function setPlayer(Player $player) : Game
     {
         $this->player = $player;
         return $this;
     }
 
     /**
-     * Starts the game
+     * @return string
      */
-    public function start() : void
+    public function getName(): string
     {
-        echo "Welcome!\nWould you like to play as a 1) fighter or 2) civilian?\n"
-             ."Fighters can challenge their opponents to a game "
-             ."of Rock, Paper, Scissors. Civilians can play hangman.\n";
-
-        while (true){
-            $player = readline("Please select a number: ");
-            if($player == 1 || $player == 2){
-                break;
-            }
-        }
-        $name = readline("Please enter your player's name: ");
-        $language = readline("Please specify your player's language by entering a language"
-                         ."code (e.g. fr, en, es, de...): ");
-
-        if ($player == 1) {
-            $this->addPlayer(new Fighter($name, $language));
-        } else {
-            $this->addPlayer(new Civilian($name, $language));
-        }
-
-        echo "After a long walk, you see somebody in the distance and decide to greet them.\n";
-        $this->getPlayer()->greetOpponent();
-        echo "They greet you back and you start playing a game.\n";
-        $this->getPlayer()->challengeOpponent();
+        return $this->name;
     }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
 }

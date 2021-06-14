@@ -1,33 +1,36 @@
 <?php
 
-require_once 'Traits/Hangman.php';
 require_once 'Player.php';
-require_once 'Person.php';
+require_once 'Hangman.php';
 
-class Civilian extends Person implements Player
+class Civilian extends Player
 {
-    use Hangman;
 
     public function __construct(string $name, string $language)
     {
-        $this->name = $name;
-        $this->language = $language;
-    }
+        parent::__construct($name, $language);
 
-    public function greetOpponent()
-    {
-        $language = $this->getLanguage();
-        $name = $this->getName();
-        $greeting = $this->translateHello($language);
+        //Output a terminal message to greet the player
+        $greeting = $this->greet($name, $language);
+        $this->displayMessage($greeting, 1);
 
-        echo sprintf("%s, I am %s! It is very nice meeting you...\n", $greeting, $name);
+        //Play hangman a given number of rounds
+        $rounds = $this->getUserInput('How many rounds of hangman would you like to play?');
+        $this->challengeOpponent($rounds);
     }
 
     /*
-     * A civilian challenges their opponent to a game of hangman.
+     * A civilian can challenge their opponent to a game of hangman.
      */
-    public function challengeOpponent()
+    public function challengeOpponent($rounds)
     {
-        $this->playHangman();
+        $game = new Hangman();
+        $game->playHangman($rounds);
+    }
+
+    public function greet($name, $language): string
+    {
+        $international_hello = $this->translateHello($language);
+        return sprintf("%s, %s! How is it going?", $international_hello, $name);
     }
 }
