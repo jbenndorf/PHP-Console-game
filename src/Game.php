@@ -11,8 +11,13 @@ class Game
 
     public function __construct(){
         Player::displayMessage('Welcome!', 1);
+        $this->saveDetails();
+        $this->startGame();
     }
 
+    /*
+     * Retrieves the user's name and language based on input
+     */
     public function saveDetails() : void
     {
         $this->name = Player::getUserInput("Please enter your name: ");
@@ -21,6 +26,9 @@ class Game
             ."code (e.g. fr, en, es, de...): ");
     }
 
+    /*
+     * Starts the game
+     */
     public function startGame() : void
     {
         $name = $this->getName();

@@ -21,30 +21,27 @@ class Hangman
     {
         for ($i = 0; $i < $rounds + 1; $i++) {
             $secret_word = $this->selectRandomWord();
-
-            //Initialises array for the selected word
-            $secret_letters = array();
-            foreach (str_split($secret_word) as $letter) {
-                $secret_letters[$letter] = '_';
-            }
+            $secret_letters = str_split($secret_word);
+            $displayed_chars = array_fill(0, strlen($secret_word), '_');
 
             while (true) {
                 //Displays the array values to the user
-                $display = implode(' ', array_values($secret_letters));
+                $display = implode(' ', $displayed_chars);
                 Player::displayMessage($display,0);
-                $guess = Player::getUserInput('Guess a letter: ');
-
-                /*Checks whether the user input matches a letter
-                  and updates array values if appropriate*/
-                foreach ($secret_letters as $letter => &$key) {
-                    if ($guess === $letter) {
-                        $key = $letter;
-                    }
-                }
 
                 if (!str_contains($display, '_')) {
                     Player::displayMessage("Congratulations, you won!\n", 0);
                     break;
+                }
+
+                $guess = Player::getUserInput('Guess a letter: ');
+
+                /*Checks whether the user input matches a letter
+                  and updates array values if appropriate*/
+                foreach ($secret_letters as $index => $value) {
+                    if ($guess === $value) {
+                        $displayed_chars[$index] = $value;
+                    }
                 }
             }
         }

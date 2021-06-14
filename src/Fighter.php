@@ -16,8 +16,6 @@ class Fighter extends Player
         //Play Rock, Paper, Scissors a given number of rounds
         $rounds = $this->getUserInput('How many rounds of Rock, Paper, Scissors would you like to play?');
         $this->challengeOpponent($rounds);
-
-
     }
 
     public function challengeOpponent($rounds)
